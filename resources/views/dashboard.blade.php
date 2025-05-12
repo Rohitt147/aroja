@@ -1,7 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-  
+<div class="row">
+    <div class="col-12">
+        @if (Session::has('status'))
+            <div class="alert alert-success alert-block">
+                <strong>{{ Session::get('status') }}</strong>
+            </div>
+        @endif
+        @if (Session::has('error'))
+            <div class="alert alert-danger alert-block">
+                <strong>{{ Session::get('error') }}</strong>
+            </div>
+        @endif
+    </div>
+</div>
 <div class="pcoded-inner-content">
     <!-- Main-body start -->
     <div class="main-body">

@@ -78,7 +78,13 @@
                 </li>
                 <li class="user-profile header-notification">
                     <a href="#!" class="waves-effect waves-light">
-                        <img src="{{ URL::asset('assets/images/avatar-4.jpg') }}" class="img-radius" alt="User-Profile-Image">
+                        {{-- <img src="{{ URL::asset('assets/images/avatar-4.jpg') }}" class="img-radius" alt="User-Profile-Image"> --}}
+
+                        <img src="{{ env('LIVE_IMAGE_LINK') }}{{ Auth::user()->companies?->logo ?? '' }}"
+                                class="img-radius" alt="User-Profile-Image"
+                                onerror="this.onerror=null; this.src='{{ asset('images/avatar-4.jpg') }}'">
+
+
                         <span>{{ strtoupper(auth()->user()->name) }}</span>
                         <i class="ti-angle-down"></i>
                     </a>

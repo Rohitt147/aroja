@@ -5,7 +5,10 @@
             <div class="pcoded-inner-navbar main-menu mt-3">
                 <div class="">
                     <div class="main-menu-header">
-                        <img class="img-80 img-radius" src="{{ URL::asset('assets/images/avatar-4.jpg') }}" alt="User-Profile-Image">
+                        {{-- <img class="img-80 img-radius" src="{{ URL::asset('assets/images/avatar-4.jpg') }}" alt="User-Profile-Image"> --}}
+                        <img src="{{ env('LIVE_IMAGE_LINK') }}{{ Auth::user()->companies?->logo ?? '' }}"
+                                class="img-80 img-radius" alt="User-Profile-Image"
+                                onerror="this.onerror=null; this.src='{{ asset('images/avatar-4.jpg') }}'">
                         <div class="user-details">
                             <span id="more-details">{{ strtoupper(Auth::user()->name) }}<i class="fa fa-caret-down"></i></span>
                         </div>
@@ -32,74 +35,85 @@
                     </li>
                 </ul>
                 @php
-                    $currentRoute = Route::currentRouteName();
-
-                    $entryMenuRoutes = [
-                        'party.index', 
-                        'booking.entry',
-                        'manifest.entry',
-                        'bill.create',
-                        'user.index',
-                        // add all ENTRY menu route names here
-                    ];
-                    $isEntryActive = in_array(Route::currentRouteName(), $entryMenuRoutes);
-                @endphp
+                $currentRoute = Route::currentRouteName();
+            
+                $entryMenuRoutes = [
+                    'party.index', 
+                    'company.index',
+                    'booking.entry',
+                    'manifest.entry',
+                    'bill.create',
+                    'companies.create',
+                    'companies.edit',
+                    // other ENTRY routes
+                ];
+            
+                $utilityMenuRoutes = [
+                    'user.index',
+                    // other UTILITIES routes
+                ];
+            
+                $isEntryActive = in_array($currentRoute, $entryMenuRoutes);
+                $isUtilityActive = in_array($currentRoute, $utilityMenuRoutes);
+            @endphp
+            
                 <!-- ENTRY -->
                 <ul class="pcoded-item pcoded-left-item">
-                    <li class="pcoded-hasmenu {{ Route::currentRouteName() == 'party.index' ? 'pcoded-trigger' : '' }}">
+                    <li class="pcoded-hasmenu {{ $isEntryActive ? 'pcoded-trigger' : '' }}">
                         <a href="javascript:void(0)" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="fa fa-keyboard"></i></span>
                             <span class="pcoded-mtext">ENTRY</span>
                             
                         </a>
-                        <ul class="pcoded-submenu" style="{{ Route::currentRouteName() == 'party.index' ? 'display:block;' : '' }}">
-                            <li class="{{ Route::currentRouteName() == 'party.index' ? 'active' : '' }}">
+                        <ul class="pcoded-submenu" style="{{ $isEntryActive ? 'display:block;' : '' }}">
+                            <li class="{{ $currentRoute == 'party.index' ? 'active' : '' }}">
                                 <a href="{{ route('party.index') }}" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">PARTY MASTER</span>
                                 </a>
                             </li>
-                            
+                            @if(Auth::user()->isType(['ADMIN']))
+                                <li class="{{ in_array($currentRoute, ['company.index', 'companies.create', 'companies.edit']) ? 'active' : '' }}">
+                                    <a href="{{ route('company.index') }}" class="waves-effect waves-dark">
+                                        <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                        <span class="pcoded-mtext">COMPANY CREATE</span>
+                                    </a>
+                                </li>
+                            @endif
                             <li class=" ">
                                 <a href="breadcrumb.html" class="waves-effect waves-dark active">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">BOOKING ENTRY</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
                                 <a href="breadcrumb.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">OUT-SCAN MANIFEST</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
                                 <a href="breadcrumb.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">BILL CREATE</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
                                 <a href="breadcrumb.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">CASH ENTRY</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
                                 <a href="breadcrumb.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">BANK ENTRY</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
                                 <a href="breadcrumb.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">CITY ENTRY</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
@@ -179,91 +193,78 @@
                                 <a href="breadcrumb.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">C.N. REGISTER PRINT</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
                                 <a href="button.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">C.N. USER REGISTER PRINT</span>
-                                    
                                 </a>
                             </li>
                             <li class="">
                                 <a href="accordion.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">C.N. PARTY STATMENT</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
                                 <a href="tabs.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">C.N. SLIP PRINTING</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
                                 <a href="color.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">BILL PRINTING</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
                                 <a href="label-badge.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">DAILY REPORT COMPP.</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
                                 <a href="tooltip.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">BILL REGISTER PRINT</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
                                 <a href="typography.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">ARIA DELIVERY STATMENT</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
                                 <a href="notification.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">CASH BOOK PRINT</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
                                 <a href="notification.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">CABANK BOOK PRINT</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
                                 <a href="notification.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">LADGER BOOK PRINT</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
                                 <a href="notification.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">OUT STANDING LIST</span>
-                                    
                                 </a>
                             </li>
                             <li class=" ">
                                 <a href="notification.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">GST TEXT REGISTER</span>
-                                    
                                 </a>
                             </li>
                         </ul>
@@ -284,7 +285,6 @@
                                 <a href="breadcrumb.html" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">ENTRY</span>
-                                    
                                 </a>
                             </li>
                         </ul>
@@ -293,15 +293,15 @@
 
                 <!-- UTILITIES -->
                 <ul class="pcoded-item pcoded-left-item">
-                    <li class="pcoded-hasmenu" style="{{ $isEntryActive ? 'display:block;' : '' }}">
+                    <li class="pcoded-hasmenu" style="{{ $isUtilityActive ? 'pcoded-trigger' : '' }}">
                         <a href="javascript:void(0)" class="waves-effect waves-dark">
                             <span class="pcoded-micon"><i class="fa fa-tasks" aria-hidden="true"></i></i>
                             </span>
                             <span class="pcoded-mtext">ADMIN</span>
                             
                         </a>
-                        <ul class="pcoded-submenu"  style="{{ $isEntryActive ? 'display:block;' : '' }}">
-                            <li class="{{ Route::currentRouteName() == 'user.index' ? 'active' : '' }}">
+                        <ul class="pcoded-submenu"   style="{{ $isUtilityActive ? 'display:block;' : '' }}">
+                            <li class="{{ $currentRoute == 'user.index' ? 'active' : '' }}">
                                 <a href="{{ route('user.index') }}" class="waves-effect waves-dark">
                                     <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                     <span class="pcoded-mtext">USERS</span>
@@ -313,6 +313,5 @@
                 
             </div>
         </nav>
-        
     </div>
 </div>
