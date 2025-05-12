@@ -197,10 +197,10 @@
 
                 <button type="submit" class="btn btn-primary btn-block mb-4"><b> Login </b></button>
 
-                <div class="text-center">
-                    <span>Don't Have Account?</span>
-                    <a href="{{ route('register') }}" class="text-decoration-none">Register</a>
-                </div>
+                  <div class="text-center">
+                      <span>Don't Have Account?</span>
+                      <a href="{{ route('register') }}" class="text-decoration-none">Register</a>
+                  </div>
             </form>
           </div>
         </div>

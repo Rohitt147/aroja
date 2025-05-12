@@ -6186,7 +6186,7 @@ table tbody .border-bottom-info td {
 }
 
 body[themebg-pattern="theme1"] {
-	background-color: #448aff;
+	background-color: #8cdae9;
 }
 
 .pcoded .pcoded-navbar .pcoded-header[header-theme="theme1"] {
@@ -6540,7 +6540,7 @@ body[themebg-pattern="theme1"] {
 
 .pcoded[fream-type="theme1"] .main-menu .main-menu-header:before,
 .pcoded[fream-type="theme1"] .page-header:before {
-	background: rgba(68, 138, 255, 0.5);
+	background: rgb(0, 0, 0);
 }
 
 .bg-c-red{

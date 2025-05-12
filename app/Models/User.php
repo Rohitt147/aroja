@@ -21,7 +21,18 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'user_type',
+        'email_verified_at',
     ];
+
+    public function companies()
+    {
+        return $this->hasOne(Company::class, 'user_id'); // changed to hasMany
+    }
+
+    public function isType($types = ['ADMIN']){
+        return null != in_array($this->user_type, $types);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
